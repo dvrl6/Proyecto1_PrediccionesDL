@@ -117,12 +117,12 @@ La ejecución exitosa de los scripts de esta fase genera los siguientes artefact
 2.  **`liver_cancer_model.keras`**: El modelo de Deep Learning final, entrenado, optimizado y listo para hacer predicciones.
 
 🐍 Fase 2: Desarrollo del Back-end (API en Python)
-Esta fase consiste en un servidor web que expone el modelo de IA a través de una API REST, listo para recibir peticiones del front-end.
+-----
 
-📂 Estructura del Directorio
-
+## 📂 Estructura del Directorio
 El código para el back-end se encuentra en la carpeta fase_2_backend/:
 
+```
 fase_2_backend/
 │
 ├── 📂 venv-backend/                 # Entorno virtual (Ignorado por .gitignore)
@@ -132,17 +132,24 @@ fase_2_backend/
 │
 ├── 📦 liver_cancer_model.keras    # Copia del modelo entrenado (de Fase 1).
 └── 📦 preprocessor.joblib         # Copia del preprocesador (de Fase 1).
-🛠️ Instalación y Configuración
+```
+
+-----
+## 🛠️ Instalación y Configuración
 
 El back-end utiliza su propio entorno virtual, separado del de la Fase 1.
 
-Navegar a la Carpeta: Abre una terminal en la raíz del proyecto y navega a la carpeta del back-end:
+**1. Navegar a la Carpeta**
 
+Abre una terminal en la raíz del proyecto y navega a la carpeta del back-end:
+
+```bash
 
 cd fase_2_backend
-Configurar el Entorno Virtual:
+```
+**2. Configurar el Entorno Virtual**
 
-
+```
 # Crea el entorno virtual (solo la primera vez), puedes usar python o python3
 python3 -m venv venv-backend
 
@@ -151,22 +158,31 @@ python3 -m venv venv-backend
 .\venv-backend\Scripts\activate
 # En macOS/Linux:
 source venv-backend/bin/activate
+```
 
-Instalar Dependencias: Con el entorno (venv-backend) activado, instala las librerías necesarias:
+**3. Instalar Dependencias con el entorno (venv-backend) activado**
 
+```bash
 
 # En macOS puede ser necesario usar pip3
 pip3 install -r requirements.txt
-🚀 Uso y Ejecución
+```
+
+-----
+## 🚀 Uso y Ejecución
 
 Una vez instaladas las dependencias, puedes iniciar el servidor de la API.
 
+```bash
 
 # Asegúrate de estar en fase_2_backend/ y con venv-backend activado
 python3 app.py
+```
+
 El servidor comenzará a ejecutarse y quedará "escuchando" peticiones en http://127.0.0.1:5000.
 
-📡 Endpoint de Predicción
+-----
+## 📡 Endpoint de Predicción
 
 La API expone un único endpoint para las predicciones:
 
@@ -176,8 +192,8 @@ Método: POST
 
 Cuerpo (Body) de la Petición: Un JSON con los 13 features del paciente.
 
-JSON
-
+**JSON**
+```
 {
     "age": 65,
     "gender": "Female",
@@ -193,37 +209,42 @@ JSON
     "physical_activity_level": "Low",
     "diabetes": 1
 }
+```
 
-Ejemplo de respuesta Exitosa (JSON):
+Respuesta Exitosa (JSON):
 
-JSON
-
+**JSON**
+```
 {
     "porcentaje_riesgo": 82.15,
     "mensaje_accion": "Alerta: Cita clínica inmediata."
 }
+```
 
-🌐 Fase 3: Diseño del Front-end (Web App)
+## 🌐 Fase 3: Diseño del Front-end (Web App)
+-----
 Esta fase conecta la interfaz de usuario con el back-end para crear una aplicación funcional. Se incluye un prototipo simple para pruebas de integración.
-
-📂 Estructura del Directorio (Prototipo Simple)
+-----
+## 📂 Estructura del Directorio (Prototipo Simple)
 
 El código para la prueba de front-end se encuentra en fase_3_frontend_simple/:
 
+```
 fase_3_frontend_simple/
 │
 ├── 📜 index.html        # Estructura del formulario de entrada.
-├── 📜 style.css         # Estilos mínimos para el formulario.
-└── 📜 app.js            # Lógica JS (fetch) para llamar a la API.
-🛠️ Instalación
+├── 🎨 style.css         # Estilos mínimos para el formulario.
+└── 🧠 app.js            # Lógica JS (fetch) para llamar a la API.
+```
+
+## 🛠️ Instalación
 
 No se requiere instalación. Esta interfaz es una aplicación web estática (HTML/CSS/JS) que se ejecuta directamente en el navegador.
 
-🚀 Uso y Ejecución
-
+## 🚀 Uso y Ejecución
 Para que el front-end funcione, la API de Back-end (Fase 2) debe estar ejecutándose.
 
-Asegúrate de que el servidor de fase_2_backend esté corriendo (python3 app.py). Puedes usar pyhton o python3
+Asegúrate de que el servidor de fase_2_backend esté corriendo (python3 app.py).
 
 Navega a la carpeta fase_3_frontend_simple/.
 
@@ -231,11 +252,12 @@ Abre el archivo index.html directamente en tu navegador web (ej. Chrome, Firefox
 
 Llena el formulario y presiona "Predecir Riesgo" para ver el resultado.
 
-🏁 Fase 4: Demostración de la Aplicación Completa
+## 🏁 Fase 4: Demostración de la Aplicación Completa
 Para ejecutar el proyecto de extremo a extremo (End-to-End), sigue estos pasos:
 
-Terminal 1: Iniciar el Back-end (API)
+**1. Terminal 1: Iniciar el Back-end (API)**
 
+```bash
 
 # Ir a la carpeta del back-end
 cd fase_2_backend
@@ -245,15 +267,15 @@ source venv-backend/bin/activate
 
 # Ejecutar el servidor
 python3 app.py
+```
 
-# ¡Dejar esta terminal abierta!
-Paso 2: Abrir el Front-end
+**2. Paso 2: Abrir el Front-end**
 
 Navega a la carpeta fase_3_frontend_simple/.
 
 Haz doble clic en el archivo index.html.
 
-Paso 3: Probar
+**3. Paso 3: Probar**
 
 La página web se abrirá en tu navegador.
 
