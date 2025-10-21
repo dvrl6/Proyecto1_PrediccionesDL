@@ -208,3 +208,16 @@ __marimo__/
 
 # KerasTuner results
 tuner_results/
+
+# Entornos Virtuales de Python
+venv/
+venv-backend/
+fase_1_modelo/venv/
+fase_2_backend/venv-backend/
+
+# Cache de Python
+__pycache__/
+*.pyc
+
+# Archivos de macOS
+.DS_Store
