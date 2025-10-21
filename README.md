@@ -251,7 +251,7 @@ Abre el archivo index.html directamente en tu navegador web (ej. Chrome, Firefox
 
 Llena el formulario y presiona "Predecir Riesgo" para ver el resultado.
 
-## 🏁 Fase 4: Demostración de la Aplicación Completa
+## 🏁 Demostración de la Aplicación Completa
 Para ejecutar el proyecto de extremo a extremo (End-to-End), sigue estos pasos:
 
 **1. Terminal 1: Iniciar el Back-end (API)**
