@@ -223,8 +223,7 @@ Respuesta Exitosa (JSON):
 
 ## 🌐 Fase 3: Diseño del Front-end (Web App)
 -----
-Esta fase conecta la interfaz de usuario con el back-end para crear una aplicación funcional. Se incluye un prototipo simple para pruebas de integración.
------
+
 ## 📂 Estructura del Directorio (Prototipo Simple)
 
 El código para la prueba de front-end se encuentra en fase_3_frontend_simple/:
