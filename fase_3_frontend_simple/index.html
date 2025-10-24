@@ -1,85 +1,440 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prueba de API - Cáncer de Hígado</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-    <main>
-        <h1>Prueba de Integración (Front-End Mínimo)</h1>
-        
-        <form id="prediction-form">
-            <h3>Datos del Paciente</h3>
-            
-            <label for="age">Edad:</label>
-            <input type="number" id="age" value="65" required>
-
-            <label for="gender">Género:</label>
-            <select id="gender" required>
-                <option value="Female">Female</option>
-                <option value="Male">Male</option>
-            </select>
-
-            <label for="bmi">BMI (Índice de Masa Corporal):</label>
-            <input type="number" step="0.1" id="bmi" value="28.5" required>
-
-            <label for="alcohol_consumption">Consumo de Alcohol:</label>
-            <select id="alcohol_consumption" required>
-                <option value="Regular">Regular</option>
-                <option value="Occasional">Occasional</option>
-                <option value="Never">Never</option>
-            </select>
-
-            <label for="smoking_status">Estado de Tabaquismo:</label>
-            <select id="smoking_status" required>
-                <option value="Former">Former</option>
-                <option value="Current">Current</option>
-                <option value="Never">Never</option>
-            </select>
-
-            <label for="hepatitis_b">Hepatitis B (0=No, 1=Sí):</label>
-            <input type="number" id="hepatitis_b" value="0" min="0" max="1" required>
-
-            <label for="hepatitis_c">Hepatitis C (0=No, 1=Sí):</label>
-            <input type="number" id="hepatitis_c" value="0" min="0" max="1" required>
-
-            <label for="liver_function_score">Puntaje Función Hepática:</label>
-            <input type="number" step="0.1" id="liver_function_score" value="75.5" required>
-
-            <label for="alpha_fetoprotein_level">Nivel Alfa-fetoproteína:</label>
-            <input type="number" step="0.01" id="alpha_fetoprotein_level" value="120.7" required>
-
-            <label for="cirrhosis_history">Historial Cirrosis (0=No, 1=Sí):</label>
-            <input type="number" id="cirrhosis_history" value="1" min="0" max="1" required>
-
-            <label for="family_history_cancer">Historial Cáncer Familiar (0=No, 1=Sí):</label>
-            <input type="number" id="family_history_cancer" value="0" min="0" max="1" required>
-
-            <label for="physical_activity_level">Nivel Actividad Física:</label>
-            <select id="physical_activity_level" required>
-                <option value="Low">Low</option>
-                <option value="Moderate">Moderate</option>
-                <option value="High">High</option>
-            </select>
-            
-            <label for="diabetes">Diabetes (0=No, 1=Sí):</label>
-            <input type="number" id="diabetes" value="1" min="0" max="1" required>
-
-            <button type="submit" id="submit-button">Predecir Riesgo</button>
-        </form>
-
-        <div id="result-container" class="hidden">
-            <h2>Resultado de la Predicción</h2>
-            <p>Porcentaje de Riesgo:</p>
-            <div id="riesgo-display">--%</div>
-            <p>Acción Recomendada:</p>
-            <div id="mensaje-display">--</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Predictor de Riesgo Hepático - IA Médica</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script src="/_sdk/element_sdk.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+    <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+  </head>
+  <body>
+    <!-- Pantalla de Bienvenida -->
+    <div class="welcome-screen" id="welcomeScreen">
+      <div class="welcome-content">
+        <div class="logo-container">
+          <div class="logo-icon">
+            <svg
+              width="60"
+              height="60"
+              viewbox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"
+                fill="white"
+              />
+              <path
+                d="M19 15L19.5 17L21 17.5L19.5 18L19 20L18.5 18L17 17.5L18.5 17L19 15Z"
+                fill="white"
+              />
+              <path
+                d="M5 6L5.5 7.5L7 8L5.5 8.5L5 10L4.5 8.5L3 8L4.5 7.5L5 6Z"
+                fill="white"
+              />
+            </svg>
+          </div>
         </div>
-    </main>
-
+        <h1 class="main-title">Predictor de Riesgo Hepático</h1>
+        <p class="welcome-subtitle">
+          Tecnología de IA avanzada para evaluación médica precisa y
+          personalizada
+        </p>
+        <button class="cta-button" id="startButton">Comenzar Evaluación</button>
+      </div>
+    </div>
+    <!-- Pantalla del Formulario -->
+    <div class="form-screen" id="formScreen">
+      <div class="form-container">
+        <div class="form-header">
+          <div class="progress-container">
+            <div class="progress-steps" id="progressSteps">
+              <div class="progress-step">
+                <div class="step-circle active" id="stepCircle1">1</div>
+                <div class="step-label">Información Personal</div>
+                <div class="step-connector" id="connector1"></div>
+              </div>
+              <div class="progress-step">
+                <div class="step-circle" id="stepCircle2">2</div>
+                <div class="step-label">Estilo de Vida</div>
+                <div class="step-connector" id="connector2"></div>
+              </div>
+              <div class="progress-step">
+                <div class="step-circle" id="stepCircle3">3</div>
+                <div class="step-label">Historial Médico</div>
+                <div class="step-connector" id="connector3"></div>
+              </div>
+              <div class="progress-step">
+                <div class="step-circle" id="stepCircle4">4</div>
+                <div class="step-label">Laboratorio</div>
+              </div>
+            </div>
+          </div>
+          <h2 class="step-title" id="stepTitle">Información Personal</h2>
+          <p class="step-description" id="stepDescription">
+            Comencemos con algunos datos básicos
+          </p>
+        </div>
+        <div class="form-content">
+          <!-- Paso 1: Datos Personales -->
+          <div class="step active" id="step1">
+            <div class="question-group">
+              <h3 class="question-title">
+                <span class="question-icon">1</span> Información Básica
+              </h3>
+              <div class="input-group">
+                <label class="input-label">¿Cuál es tu edad?</label>
+                <input
+                  type="number"
+                  class="form-input"
+                  id="age"
+                  min="1"
+                  max="120"
+                  placeholder="Ej: 65"
+                />
+                <div class="error-message" id="ageError">
+                  La edad debe estar entre 1 y 120 años
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label">Género</label>
+                <div class="option-grid">
+                  <label class="option-card">
+                    <input type="radio" name="gender" value="Male" />
+                    <div class="option-title">👨 Masculino</div></label
+                  >
+                  <label class="option-card">
+                    <input type="radio" name="gender" value="Female" />
+                    <div class="option-title">👩 Femenino</div></label
+                  >
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label">Índice de Masa Corporal (IMC)</label>
+                <input
+                  type="number"
+                  class="form-input"
+                  id="bmi"
+                  step="0.1"
+                  min="0.1"
+                  max="50"
+                  placeholder="Ej: 28.5"
+                />
+                <div class="error-message" id="bmiError">
+                  El IMC debe ser un valor positivo mayor a 0
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Paso 2: Estilo de Vida -->
+          <div class="step" id="step2">
+            <div class="question-group">
+              <h3 class="question-title">
+                <span class="question-icon">2</span> Hábitos y Estilo de Vida
+              </h3>
+              <div class="input-group">
+                <label class="input-label"
+                  >¿Con qué frecuencia consumes alcohol?</label
+                >
+                <div class="option-grid">
+                  <label class="option-card">
+                    <input
+                      type="radio"
+                      name="alcohol_consumption"
+                      value="Never"
+                    />
+                    <div class="option-title">🚫 Nunca</div>
+                    <div class="option-description">
+                      No consumo alcohol
+                    </div></label
+                  >
+                  <label class="option-card">
+                    <input
+                      type="radio"
+                      name="alcohol_consumption"
+                      value="Occasional"
+                    />
+                    <div class="option-title">🍷 Ocasional</div>
+                    <div class="option-description">
+                      Eventos especiales
+                    </div></label
+                  >
+                  <label class="option-card">
+                    <input
+                      type="radio"
+                      name="alcohol_consumption"
+                      value="Regular"
+                    />
+                    <div class="option-title">🍺 Regular</div>
+                    <div class="option-description">
+                      Varias veces por semana
+                    </div></label
+                  >
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label">Estado de tabaquismo</label>
+                <div class="option-grid">
+                  <label class="option-card">
+                    <input type="radio" name="smoking_status" value="Never" />
+                    <div class="option-title">✅ Nunca</div>
+                    <div class="option-description">Nunca he fumado</div></label
+                  >
+                  <label class="option-card">
+                    <input type="radio" name="smoking_status" value="Former" />
+                    <div class="option-title">🚭 Ex-fumador</div>
+                    <div class="option-description">Dejé de fumar</div></label
+                  >
+                  <label class="option-card">
+                    <input type="radio" name="smoking_status" value="Current" />
+                    <div class="option-title">🚬 Fumador</div>
+                    <div class="option-description">
+                      Fumo actualmente
+                    </div></label
+                  >
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label">Nivel de actividad física</label>
+                <div class="option-grid">
+                  <label class="option-card">
+                    <input
+                      type="radio"
+                      name="physical_activity_level"
+                      value="Low"
+                    />
+                    <div class="option-title">🛋️ Bajo</div>
+                    <div class="option-description">Sedentario</div></label
+                  >
+                  <label class="option-card">
+                    <input
+                      type="radio"
+                      name="physical_activity_level"
+                      value="Moderate"
+                    />
+                    <div class="option-title">🚶 Moderado</div>
+                    <div class="option-description">
+                      Ejercicio ocasional
+                    </div></label
+                  >
+                  <label class="option-card">
+                    <input
+                      type="radio"
+                      name="physical_activity_level"
+                      value="High"
+                    />
+                    <div class="option-title">🏃 Alto</div>
+                    <div class="option-description">
+                      Ejercicio regular
+                    </div></label
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Paso 3: Historial Médico -->
+          <div class="step" id="step3">
+            <div class="question-group">
+              <h3 class="question-title">
+                <span class="question-icon">3</span> Historial Médico
+              </h3>
+              <div class="input-group">
+                <label class="input-label">¿Has tenido Hepatitis B?</label>
+                <div class="option-grid">
+                  <label class="option-card">
+                    <input type="radio" name="hepatitis_b" value="0" />
+                    <div class="option-title">❌ No</div>
+                  </label>
+                  <label class="option-card">
+                    <input type="radio" name="hepatitis_b" value="1" />
+                    <div class="option-title">⚠️ Sí</div>
+                  </label>
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label">¿Has tenido Hepatitis C?</label>
+                <div class="option-grid">
+                  <label class="option-card">
+                    <input type="radio" name="hepatitis_c" value="0" />
+                    <div class="option-title">❌ No</div></label
+                  >
+                  <label class="option-card">
+                    <input type="radio" name="hepatitis_c" value="1" />
+                    <div class="option-title">⚠️ Sí</div></label
+                  >
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label"
+                  >¿Tienes historial de cirrosis?</label
+                >
+                <div class="option-grid">
+                  <label class="option-card">
+                    <input type="radio" name="cirrhosis_history" value="0" />
+                    <div class="option-title">❌ No</div></label
+                  >
+                  <label class="option-card">
+                    <input type="radio" name="cirrhosis_history" value="1" />
+                    <div class="option-title">⚠️ Sí</div></label
+                  >
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label">¿Tienes diabetes?</label>
+                <div class="option-grid">
+                  <label class="option-card">
+                    <input type="radio" name="diabetes" value="0" />
+                    <div class="option-title">❌ No</div></label
+                  >
+                  <label class="option-card">
+                    <input type="radio" name="diabetes" value="1" />
+                    <div class="option-title">⚠️ Sí</div></label
+                  >
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label"
+                  >¿Hay historial familiar de cáncer?</label
+                >
+                <div class="option-grid">
+                  <label class="option-card">
+                    <input
+                      type="radio"
+                      name="family_history_cancer"
+                      value="0"
+                    />
+                    <div class="option-title">❌ No</div></label
+                  >
+                  <label class="option-card">
+                    <input
+                      type="radio"
+                      name="family_history_cancer"
+                      value="1"
+                    />
+                    <div class="option-title">⚠️ Sí</div></label
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Paso 4: Valores de Laboratorio -->
+          <div class="step" id="step4">
+            <div class="question-group">
+              <h3 class="question-title">
+                <span class="question-icon">4</span> Valores de Laboratorio
+              </h3>
+              <div class="input-group">
+                <label class="input-label"
+                  >Puntuación de Función Hepática</label
+                >
+                <input
+                  type="number"
+                  class="form-input"
+                  id="liver_function_score"
+                  step="0.1"
+                  min="0"
+                  placeholder="Ej: 75.5"
+                />
+                <div class="error-message" id="liverFunctionError">
+                  La puntuación debe ser un valor positivo (0 o mayor)
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label"
+                  >Nivel de Alfa-fetoproteína (ng/mL)</label
+                >
+                <input
+                  type="number"
+                  class="form-input"
+                  id="alpha_fetoprotein_level"
+                  step="0.1"
+                  min="0"
+                  placeholder="Ej: 120.7"
+                />
+                <div class="error-message" id="afpLevelError">
+                  El nivel debe ser un valor positivo (0 o mayor)
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="navigation-buttons">
+            <button
+              class="nav-button btn-back"
+              id="backButton"
+              style="display: none"
+            >
+              Anterior
+            </button>
+            <button class="nav-button btn-next" id="nextButton">
+              Siguiente
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Pantalla de Análisis -->
+    <div class="analysis-screen" id="analysisScreen">
+      <div class="analysis-container">
+        <div class="ai-brain">
+          <div class="brain-core">
+            🧠
+            <div class="neural-network">
+              <div class="neural-dot"></div>
+              <div class="neural-dot"></div>
+              <div class="neural-dot"></div>
+              <div class="neural-dot"></div>
+              <div class="neural-dot"></div>
+            </div>
+          </div>
+        </div>
+        <h2 class="analysis-title">Analizando Datos</h2>
+        <p class="analysis-subtitle">
+          Nuestra IA está procesando tu información médica
+        </p>
+        <div class="progress-dots">
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+        <ul class="analysis-steps" id="analysisSteps">
+          <li class="analysis-step">Procesando datos personales...</li>
+          <li class="analysis-step">Evaluando factores de riesgo...</li>
+          <li class="analysis-step">Analizando historial médico...</li>
+          <li class="analysis-step">Calculando probabilidades...</li>
+          <li class="analysis-step">Generando reporte final...</li>
+        </ul>
+      </div>
+    </div>
+    <!-- Pantalla de Resultados -->
+    <div class="results-screen" id="resultsScreen">
+      <div class="results-container">
+        <div class="results-icon risk-high" id="resultsIcon">⚠️</div>
+        <div class="risk-percentage risk-high" id="riskPercentage">82%</div>
+        <div class="risk-message risk-high" id="riskMessage">
+          Riesgo Alto Detectado
+        </div>
+        <div class="risk-description" id="riskDescription">
+          Los factores analizados indican una probabilidad elevada. Se
+          recomienda consulta médica especializada inmediata.
+        </div>
+        <div class="action-buttons">
+          <button class="action-button btn-primary" id="newEvaluationBtn">
+            Nueva Evaluación
+          </button>
+          <button class="action-button btn-secondary" id="downloadBtn">
+            Descargar Reporte
+          </button>
+        </div>
+      </div>
+    </div>
     <script src="app.js"></script>
-</body>
+  </body>
 </html>
