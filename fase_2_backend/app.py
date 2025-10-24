@@ -5,7 +5,6 @@ import tensorflow as tf
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-
 # Inicializar la aplicación Flask
 app = Flask(__name__)
 # Habilitar CORS para permitir peticiones desde el front-end
