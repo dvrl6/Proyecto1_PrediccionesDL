@@ -1,3 +1,5 @@
+
+
 // Variables globales
 let currentStep = 1;
 const totalSteps = 4;
@@ -241,7 +243,6 @@ function validateCurrentStep() {
 }
 
 function displayResults(data) {
-  const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
   const percentageElement = document.getElementById("riskPercentage");
   const messageElement = document.getElementById("riskMessage");
   const descriptionElement = document.getElementById("riskDescription");
@@ -249,13 +250,12 @@ function displayResults(data) {
 
   // Manejar caso de error 
   if (data.porcentaje_riesgo === "Error") {
-    const alertColor = config.alert_color || defaultConfig.alert_color;
     percentageElement.className = "risk-percentage risk-high";
     messageElement.className = "risk-message risk-high";
     iconElement.className = "results-icon risk-high";
-    percentageElement.style.color = alertColor;
-    messageElement.style.color = alertColor;
-    iconElement.style.backgroundColor = alertColor;
+    percentageElement.style.color = "#e53e3e";
+    messageElement.style.color = "#e53e3e";
+    iconElement.style.backgroundColor = "#e53e3e";
 
     percentageElement.textContent = "Error";
     messageElement.textContent = "Error de Conexión";
@@ -270,13 +270,12 @@ function displayResults(data) {
 
   // Lógica visual basada en el riesgo 
   if (riskScore >= 60) {
-    const alertColor = config.alert_color || defaultConfig.alert_color;
     percentageElement.className = "risk-percentage risk-high";
     messageElement.className = "risk-message risk-high";
     iconElement.className = "results-icon risk-high";
-    percentageElement.style.color = alertColor;
-    messageElement.style.color = alertColor;
-    iconElement.style.backgroundColor = alertColor;
+    percentageElement.style.color = "#e53e3e";
+    messageElement.style.color = "#e53e3e";
+    iconElement.style.backgroundColor = "#e53e3e";
     messageElement.textContent = "Riesgo Alto Detectado";
     iconElement.textContent = "⚠️";
   } else if (riskScore >= 30) {
