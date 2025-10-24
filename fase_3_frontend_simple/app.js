@@ -1,155 +1,9 @@
-// --- Lógica del SDK de Canva (Sin cambios) ---
-// Configuración por defecto
-const defaultConfig = {
-  app_title: "Predictor de Riesgo Hepático",
-  welcome_subtitle:
-    "Tecnología de IA avanzada para evaluación médica precisa y personalizada",
-  cta_button_text: "Comenzar Evaluación",
-  background_color: "#667eea",
-  surface_color: "#ffffff",
-  text_color: "#1A202C",
-  accent_color: "#764ba2",
-  alert_color: "#e53e3e",
-  font_family: "Inter",
-};
-
-// Función de renderizado
-async function render(config) {
-  const customFont = config.font_family || defaultConfig.font_family;
-  const baseFontStack =
-    '-webkit-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-
-  // Aplicar fuente
-  document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
-
-  // Actualizar textos editables
-  const titleElement = document.querySelector(".main-title");
-  if (titleElement) {
-    titleElement.textContent = config.app_title || defaultConfig.app_title;
-  }
-
-  const subtitleElement = document.querySelector(".welcome-subtitle");
-  if (subtitleElement) {
-    subtitleElement.textContent =
-      config.welcome_subtitle || defaultConfig.welcome_subtitle;
-  }
-
-  const ctaButton = document.querySelector(".cta-button");
-  if (ctaButton) {
-    ctaButton.textContent =
-      config.cta_button_text || defaultConfig.cta_button_text;
-  }
-
-  // Aplicar colores
-  const backgroundColor =
-    config.background_color || defaultConfig.background_color;
-  const accentColor = config.accent_color || defaultConfig.accent_color;
-
-  // Actualizar gradientes
-  const welcomeScreen = document.querySelector(".welcome-screen");
-  if (welcomeScreen) {
-    welcomeScreen.style.background = `linear-gradient(135deg, ${backgroundColor} 0%, ${accentColor} 100%)`;
-  }
-
-  const resultsScreen = document.querySelector(".results-screen");
-  if (resultsScreen) {
-    resultsScreen.style.background = `linear-gradient(135deg, ${backgroundColor} 0%, ${accentColor} 100%)`;
-  }
-
-  const formHeader = document.querySelector(".form-header");
-  if (formHeader) {
-    formHeader.style.background = `linear-gradient(135deg, ${backgroundColor} 0%, ${accentColor} 100%)`;
-  }
-}
-
-// Mapeo de capacidades
-function mapToCapabilities(config) {
-  return {
-    recolorables: [
-      {
-        get: () => config.background_color || defaultConfig.background_color,
-        set: (value) => {
-          config.background_color = value;
-          window.elementSdk.setConfig({ background_color: value });
-        },
-      },
-      {
-        get: () => config.surface_color || defaultConfig.surface_color,
-        set: (value) => {
-          config.surface_color = value;
-          window.elementSdk.setConfig({ surface_color: value });
-        },
-      },
-      {
-        get: () => config.text_color || defaultConfig.text_color,
-        set: (value) => {
-          config.text_color = value;
-          window.elementSdk.setConfig({ text_color: value });
-        },
-      },
-      {
-        get: () => config.accent_color || defaultConfig.accent_color,
-        set: (value) => {
-          config.accent_color = value;
-          window.elementSdk.setConfig({ accent_color: value });
-        },
-      },
-      {
-        get: () => config.alert_color || defaultConfig.alert_color,
-        set: (value) => {
-          config.alert_color = value;
-          window.elementSdk.setConfig({ alert_color: value });
-        },
-      },
-    ],
-    borderables: [],
-    fontEditable: {
-      get: () => config.font_family || defaultConfig.font_family,
-      set: (value) => {
-        config.font_family = value;
-        window.elementSdk.setConfig({ font_family: value });
-      },
-    },
-    fontSizeable: undefined,
-  };
-}
-
-// Mapeo de valores del panel de edición
-function mapToEditPanelValues(config) {
-  return new Map([
-    ["app_title", config.app_title || defaultConfig.app_title],
-    [
-      "welcome_subtitle",
-      config.welcome_subtitle || defaultConfig.welcome_subtitle,
-    ],
-    [
-      "cta_button_text",
-      config.cta_button_text || defaultConfig.cta_button_text,
-    ],
-  ]);
-}
-
-// Inicializar SDK
-if (window.elementSdk) {
-  window.elementSdk.init({
-    defaultConfig,
-    render,
-    mapToCapabilities,
-    mapToEditPanelValues,
-  });
-}
-
-// --- Lógica del Front-End (de app canva.js) ---
-
 // Variables globales
 let currentStep = 1;
 const totalSteps = 4;
 const formData = {}; // Almacenará todos los datos del formulario
 
-// *** INICIO DE LÓGICA DE 'app compañeros.js' ***
-// URL de la API de tus compañeros
 const API_URL = "http://127.0.0.1:5000/predict";
-// *** FIN DE LÓGICA DE 'app compañeros.js' ***
 
 // Elementos del DOM
 const welcomeScreen = document.getElementById("welcomeScreen");
@@ -214,7 +68,6 @@ nextButton.addEventListener("click", () => {
       updateProgress();
       updateNavigation();
     } else {
-      // Estamos en el último paso, llamamos a la lógica real
       calculateAndShowResults();
     }
   }
@@ -272,8 +125,6 @@ function validateNumericInput(input) {
       }
       break;
 
-    // --- CORRECCIÓN ---
-    // Los IDs 'liverFunction' y 'afpLevel' fueron cambiados en el HTML
     case "liver_function_score":
       errorElement = document.getElementById("liverFunctionError");
       if (input.value && value < 0) {
@@ -301,7 +152,6 @@ function validateNumericInput(input) {
   return isValid;
 }
 
-// Funciones auxiliares de UI (Sin cambios)
 function showStep(step) {
   document.querySelectorAll(".step").forEach((s) => {
     s.classList.remove("active");
@@ -344,10 +194,7 @@ function updateNextButton() {
   nextButton.disabled = !isValid;
 }
 
-// Función de validación por paso (Corregida con los names/IDs correctos)
 function validateCurrentStep() {
-  // --- CORRECCIÓN ---
-  // Actualizado para usar los 'name' y 'id' correctos del HTML
   switch (currentStep) {
     case 1:
       const ageInput = document.getElementById("age");
@@ -393,9 +240,6 @@ function validateCurrentStep() {
   }
 }
 
-// --- INICIO DE LÓGICA DE 'app compañeros.js' (Modificada y fusionada) ---
-
-// Esta función reemplaza tu `displayResults` y usa la data REAL de la API
 function displayResults(data) {
   const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
   const percentageElement = document.getElementById("riskPercentage");
@@ -403,7 +247,7 @@ function displayResults(data) {
   const descriptionElement = document.getElementById("riskDescription");
   const iconElement = document.getElementById("resultsIcon");
 
-  // Manejar caso de error primero
+  // Manejar caso de error 
   if (data.porcentaje_riesgo === "Error") {
     const alertColor = config.alert_color || defaultConfig.alert_color;
     percentageElement.className = "risk-percentage risk-high";
@@ -420,11 +264,11 @@ function displayResults(data) {
     return;
   }
 
-  const riskScore = data.porcentaje_riesgo; // Data real de la API
+  const riskScore = data.porcentaje_riesgo; 
   percentageElement.textContent = `${riskScore}%`;
-  descriptionElement.textContent = data.mensaje_accion; // Data real de la API
+  descriptionElement.textContent = data.mensaje_accion; 
 
-  // Lógica visual basada en el riesgo (similar a tu lógica de prueba)
+  // Lógica visual basada en el riesgo 
   if (riskScore >= 60) {
     const alertColor = config.alert_color || defaultConfig.alert_color;
     percentageElement.className = "risk-percentage risk-high";
@@ -456,7 +300,6 @@ function displayResults(data) {
   }
 }
 
-// Esta función se mantiene de tu `app canva.js`
 function startAnalysisAnimation(callback) {
   const steps = document.querySelectorAll(".analysis-step");
   let currentStepIndex = 0;
@@ -485,11 +328,8 @@ function startAnalysisAnimation(callback) {
   setTimeout(animateStep, 500);
 }
 
-// Esta función reemplaza tu `calculateAndShowResults`
-// Ahora contiene la lógica de 'app compañeros.js'
+
 function calculateAndShowResults() {
-  // 1. Construir el payload para la API desde el objeto formData global
-  // Se usan parseFloat y parseInt como en 'app compañeros.js'
   const apiPayload = {
     age: parseFloat(formData.age),
     gender: formData.gender,
@@ -506,15 +346,12 @@ function calculateAndShowResults() {
     diabetes: parseInt(formData.diabetes),
   };
 
-  // 2. Mostrar pantalla de análisis (lógica de 'app canva.js')
   formScreen.classList.remove("active");
   formScreen.style.display = "none";
   analysisScreen.style.display = "flex";
   analysisScreen.classList.add("active");
 
-  // 3. Iniciar animación y pasar la llamada a la API como callback
   startAnalysisAnimation(() => {
-    // 4. Lógica de FETCH de 'app compañeros.js'
     fetch(API_URL, {
       method: "POST",
       headers: {
@@ -529,7 +366,6 @@ function calculateAndShowResults() {
         return response.json();
       })
       .then((data) => {
-        // Éxito: Ocultar análisis y mostrar resultados
         analysisScreen.classList.remove("active");
         analysisScreen.style.display = "none";
 
@@ -559,11 +395,8 @@ function calculateAndShowResults() {
       });
   });
 }
-// --- FIN DE LÓGICA FUSIONADA ---
 
-// --- Lógica de botones de resultado (de app canva.js) ---
 
-// Botón nueva evaluación (Sin cambios en la lógica, solo resetea el front-end)
 document.getElementById("newEvaluationBtn").addEventListener("click", () => {
   currentStep = 1;
   for (let key in formData) {
@@ -617,13 +450,8 @@ document.getElementById("newEvaluationBtn").addEventListener("click", () => {
   }, 300);
 });
 
-// 🗑️ ELIMINA EL BLOQUE 'downloadBtn' ANTERIOR Y PÉGALO ESTE EN SU LUGAR:
-
-// ===================================================================
-// === SECCIÓN MODIFICADA: Botón "Descargar Reporte" (Versión 2.0) ===
-// ===================================================================
 document.getElementById("downloadBtn").addEventListener("click", () => {
-  // 1. Obtener los datos actuales de la pantalla de resultados
+  // Obtener los datos actuales de la pantalla de resultados
   const riskPercentage = document.getElementById("riskPercentage").textContent;
   const riskMessage = document.getElementById("riskMessage").textContent;
   const riskDescription =
@@ -636,7 +464,7 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
   if (riskClass.includes("risk-high")) colorClass = "risk-high";
   else if (riskClass.includes("risk-moderate")) colorClass = "risk-moderate";
 
-  // 2. Construir el HTML del reporte (Sin cambios en el HTML)
+  // 2. Construir el HTML del reporte
   const reportHTML = `
         <div id="print-report" class="print-container ${colorClass}">
             <div class="print-header">
@@ -701,7 +529,7 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
         </div>
     `;
 
-  // 3. Crear los estilos para el reporte (CON CORRECCIONES)
+  // Crear los estilos para el reporte 
   // Se añade !important, -webkit-print-color-adjust, y flexbox
   const printCSS = `
         /* --- ESTILOS MEJORADOS PARA IMPRESIÓN --- */
@@ -841,7 +669,7 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
         }
     `;
 
-  // 4. Crear los estilos de impresión (@media print)
+  // Crear los estilos de impresión (@media print)
   const mediaPrintCSS = `
         @media print {
             @page {
@@ -889,7 +717,7 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
         }
     `;
 
-  // 5. Crear elementos temporales para imprimir (Sin cambios)
+  // Crear elementos temporales para imprimir 
   const reportContainer = document.createElement("div");
   reportContainer.id = "print-report-container";
   reportContainer.innerHTML = reportHTML;
@@ -898,14 +726,14 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
   styleElement.id = "print-report-styles";
   styleElement.innerHTML = printCSS + mediaPrintCSS;
 
-  // 6. Añadirlos al DOM (Sin cambios)
+  // Añadirlos al DOM 
   document.head.appendChild(styleElement);
   document.body.appendChild(reportContainer);
 
-  // 7. Llamar a la función de impresión del navegador (Sin cambios)
+  // Llamar a la función de impresión del navegador 
   window.print();
 
-  // 8. Limpiar el DOM después de imprimir (Sin cambios)
+  // Limpiar el DOM después de imprimir 
   document.head.removeChild(styleElement);
   document.body.removeChild(reportContainer);
 });
